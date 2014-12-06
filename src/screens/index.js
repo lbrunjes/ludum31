@@ -22,15 +22,15 @@ this.screens.theScreen= function(){
 	}
 
 	this.clickZones = [
-		
+
 		{	x:0,
 			y:0,
 			w:window.innerWidth,
 			h:window.innerHeight,
 			click:function(){
-				
+
 				//the buy and sell buttons
-				if(diesel.mouseX >game.width/3*2 && 
+				if(diesel.mouseX >game.width/3*2 &&
 					diesel.mouseX <game.width &&
 					diesel.mouseY < game.height/2){
 
@@ -43,11 +43,11 @@ this.screens.theScreen= function(){
 
 				}
 				//the next selected stock
-				if(diesel.mouseX > game.width/3 && 
+				if(diesel.mouseX > game.width/3 &&
 					diesel.mouseX <game.width/3*2 &&
 					diesel.mouseY < game.height/3*2){
 						game.screens.entireGame.nextStock();
-					
+
 
 				}
 
@@ -55,12 +55,12 @@ this.screens.theScreen= function(){
 
 			}
 		},
-		
+
 
 
 	];
 
-	
+
 
 	this.draw =function(){
 
@@ -93,13 +93,13 @@ this.screens.theScreen= function(){
 
 		//TODO adjust location and scaling as needed
 		context.save();
-		
+
 		context.translate(0,h/2);
 
 		var step = w/game.history.length;
 		for(var i = 0; i<game.history.length ; i++){
 			for(var stock in game.history[i]){
-			
+
 				context.strokeStyle= game.stocks.color || "#fff";
 				context.lineWidth = 1;
 
@@ -175,7 +175,7 @@ this.screens.theScreen= function(){
 		context.fillRect(x +16,y +lineh *2 +16, w/3-32, lineh*2 -32);
 
 
-	
+
 
 		context.fillStyle= "#fff";
 		context.textAlign = "left";
@@ -208,46 +208,39 @@ this.screens.theScreen= function(){
 	this.buyCurrentStock=function(){
 		console.log("buy", this.selectedStock);
 		this.actions++;
-		
-		if(game.cash &&
-			game.history[0]&&
-			game.history[0][this.selectedStock] &&
-			game.cash >= game.history[0][this.selectedStock].currentValue){
 
-			this.buySound.pause();
-			this.buySound.currentTime=0;
-			this.buySound.play();
+        if (game.user &&
+            game.history[0] &&
+            game.history[0][this.selectedStock] &&
+            game.user.purchaseStock(game.history[0][this.selectedStock])) {
 
-
-			// AWARD ST0CK
-
-			game.cash -= game.history[0][this.selectedStock].currentValue;
-
-		}
-		else{
-			this.errSound.pause();
-			this.errSound.currentTime =0;
-			this.errSound.play();
-		}
-						
+            this.buySound.pause();
+            this.buySound.currentTime=0;
+            this.buySound.play();
+        } else {
+            this.errSound.pause();
+            this.errSound.currentTime =0;
+            this.errSound.play();
+        }
 	};
 
 	this.sellCurrentStock = function(){
 		console.log("sell", this.selectedStock);
 		this.actions++;
-		if(Math.random() >.5){
+
+        if (game.user &&
+            game.history[0] &&
+            game.history[0][this.selectedStock] &&
+            game.user.sellStock(game.history[0][this.selectedStock])) {
+
 			this.sellSound.pause();
 			this.sellSound.currentTime =0;
 			this.sellSound.play();
-
-			//game.cash +=
-		}
-		else{
+		} else {
 			this.errSound.pause();
 			this.errSound.currentTime =0;
 			this.errSound.play();
 		}
-		
 	};
 
 	this.nextStock =function(){

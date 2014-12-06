@@ -21,12 +21,12 @@ this.objects.user = function (initialCash) {
     };
 
     this.purchaseStock = function (stock) {
-        var cost = stock.getCurrentValue();
+        var cost = stock.currentValue;
         if (_currentCash >= cost) {
-            if (_assets[stock.getTicker()]) {
-                _assets[stock.getTicker()] += 1;
+            if (_assets[stock.ticker]) {
+                _assets[stock.ticker] += 1;
             } else {
-                _assets[stock.getTicker()] = 1;
+                _assets[stock.ticker] = 1;
             }
             return true;
         }
@@ -34,9 +34,9 @@ this.objects.user = function (initialCash) {
     };
 
     this.sellStock = function (stock) {
-        var ticker = stock.getTicker();
+        var ticker = stock.ticker;
         if (_assets[ticker] && _assets[ticker] > 0) {
-            _currentCash += stock.getCurrentValue();
+            _currentCash += stock.currentValue;
             _assets[ticker] -= 1;
             return true;
         }
