@@ -9,7 +9,9 @@ this.screens.theScreen= function(){
 	this.buySound =false;
 	this.sellSound =false;
 	this.errSound = false;
-	this.thbbSound =false
+	this.thbbSound =false;
+
+	this.actions = 0;
 
 	this.reset = function(){
 		this.buySound = document.getElementById("buy");
@@ -27,6 +29,7 @@ this.screens.theScreen= function(){
 			h:window.innerHeight,
 			click:function(){
 				
+				//the buy and sell buttons
 				if(diesel.mouseX >game.width/3*2 && 
 					diesel.mouseX <game.width &&
 					diesel.mouseY < game.height/2){
@@ -37,6 +40,14 @@ this.screens.theScreen= function(){
 					else{
 						game.screens.entireGame.sellCurrentStock();
 					}
+
+				}
+				//the next selected stock
+				if(diesel.mouseX > game.width/3 && 
+					diesel.mouseX <game.width/3*2 &&
+					diesel.mouseY < game.height/3*2){
+						game.screens.entireGame.nextStock();
+					
 
 				}
 
@@ -53,16 +64,23 @@ this.screens.theScreen= function(){
 
 	this.draw =function(){
 
+		game.context.main.font = "32px komika-axis";
+
 		game.context.main.clearRect(0,0,game.width, game.height);
 
 		//draw a rect for the graph
-		this.drawGraph(game.context.main, game.history, 0,0, game.width/3, game.height/2);
+		this.drawGraph(game.context.main, game.history, 0,0, game.width/3, game.height/3*2);
 
 		//draw current stock
-		this.drawStock(game.context.main, this.selectedStock, game.width/3, 0, game.width/3,game.height/2);
+		this.drawStock(game.context.main, this.selectedStock, game.width/3, 0, game.width/3,game.height/3*2);
 
 		//draw buy buttons
-		this.drawButtons(game.context.main, game.width/3*2, 0, game.width/3, game.height/2);
+		this.drawButtons(game.context.main, game.width/3*2, 0, game.width/3, game.height/3*2);
+
+		//draw the bottom chrome
+		this.drawChrome(game.context.main, 0,game.height/3*2, game.width, game.height/3);
+
+
 
 	}
 
@@ -127,6 +145,35 @@ this.screens.theScreen= function(){
 
 	}
 
+	this.drawChrome= function(context,x,y,w,h){
+
+		context.fillStyle= "#9f9";
+		context.fillRect(x,y,w,h);
+		var lineh = h/4;
+
+
+		context.fillStyle= "#000";
+
+		context.fillRect(x +16,y+16, w/3-32, lineh -32);
+		context.fillRect(x +16,y +lineh +16, w/3-32, lineh -32);
+		context.fillRect(x +16,y +lineh *2 +16, w/3-32, lineh*2 -32);
+
+
+	
+
+		context.fillStyle= "#fff";
+		context.textAlign = "left";
+		context.font = (lineh-32)+"px komika-axis";
+		context.fillText("CASH:"+game.cash,x +16,y+ lineh -16 );
+		context.fillText("APM:"+this.getAPM(),x +16,y+lineh*2 -16 );
+
+
+	}
+	this.getAPM=function(){
+		var min  = ( new Date()-diesel. timeStarted )/1000/60;
+		return Math.round(this.actions/min);
+	}
+
 
 	this.update =function(ticks){
 
@@ -144,7 +191,8 @@ this.screens.theScreen= function(){
 
 	this.buyCurrentStock=function(){
 		console.log("buy", this.selectedStock);
-
+		this.actions++;
+		
 		if(game.cash &&
 			game.history[0][this.selectedStock] &&
 			game.cash >= game.history[0][this.selectedStock].currentValue){
@@ -152,6 +200,7 @@ this.screens.theScreen= function(){
 			this.buySound.pause();
 			this.buySound.currentTime=0;
 			this.buySound.play();
+
 
 			// AWARD ST0CK
 
@@ -167,7 +216,7 @@ this.screens.theScreen= function(){
 
 	this.sellCurrentStock = function(){
 		console.log("sell", this.selectedStock);
-
+		this.actions++;
 		if(Math.random() >.5){
 			this.sellSound.pause();
 			this.sellSound.currentTime =0;
@@ -180,6 +229,16 @@ this.screens.theScreen= function(){
 		}
 		
 	};
+
+	this.nextStock =function(){
+		console.log("nextStock", this.selectedStock);
+		this.actions++;
+
+		this.thbbSound.pause();
+		this.thbbSound.currentTime = 0;
+		this.thbbSound.play();
+
+	}
 
 };
 this.screens.theScreen.prototype =  new diesel.proto.screen();
