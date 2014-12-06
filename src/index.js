@@ -4,14 +4,29 @@ var  gameInstance = function(){
 	this.activeScreen = "entireGame";
 
 	this.font = "komika-axis";
-	this.fontSize = 16;
+	this.fontSize = 32;
 
 	this.width =640;
 	this.height = 480;
 
-	this.stocks = {
-		"AAA":{}
+	this.cash =100;
 
+	this.tickers =["⚗",
+		"⚒",
+		"⚙",
+		"♂",
+		"♀",
+		"☣",
+		"☘",
+		"☃",
+		"☕",
+		"☭",
+		"☮",
+		"♖",
+		"♞"]
+
+	this.stocks = {
+		
 	};
 
 	this.history =[];
