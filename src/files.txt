@@ -4,5 +4,6 @@ events/createStocks.js
 events/updateStocks.js
 objects/index.js
 objects/stock.js
+objects/user.js
 screens/index.js
 end.js

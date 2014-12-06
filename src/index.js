@@ -39,6 +39,7 @@ var  gameInstance = function(){
 
 		diesel.fpsLimit = 60;
 		game.screens[game.activeScreen].reset();
+        game.user = new game.objects.user(500);
 
 		diesel.raiseEvent("createStocks");
 
