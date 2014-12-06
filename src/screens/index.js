@@ -180,7 +180,7 @@ this.screens.theScreen= function(){
 		context.fillStyle= "#fff";
 		context.textAlign = "left";
 		context.font = (lineh-32)+"px komika-axis";
-		context.fillText("CASH:"+game.cash,x +16,y+ lineh -16 );
+		context.fillText("CASH:"+game.user.getCurrentCash(),x +16,y+ lineh -16 );
 		context.fillText("APM:"+this.getAPM(),x +16,y+lineh*2 -16 );
 
 
@@ -209,10 +209,10 @@ this.screens.theScreen= function(){
 		console.log("buy", this.selectedStock);
 		this.actions++;
 		
-		if(game.cash &&
+		if(game.user.getCurrentCash() &&
 			game.history[0]&&
 			game.history[0][this.selectedStock] &&
-			game.cash >= game.history[0][this.selectedStock].currentValue){
+			game.user.getCurrentCash() >= game.history[0][this.selectedStock].currentValue){
 
 			this.buySound.pause();
 			this.buySound.currentTime=0;
@@ -221,7 +221,7 @@ this.screens.theScreen= function(){
 
 			// AWARD ST0CK
 
-			game.cash -= game.history[0][this.selectedStock].currentValue;
+			game.user.getCurrentCash() -= game.history[0][this.selectedStock].currentValue;
 
 		}
 		else{
@@ -240,7 +240,7 @@ this.screens.theScreen= function(){
 			this.sellSound.currentTime =0;
 			this.sellSound.play();
 
-			//game.cash +=
+			//game.user.getCurrentCash() +=
 		}
 		else{
 			this.errSound.pause();
