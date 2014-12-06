@@ -13,5 +13,8 @@ this.events.updateStocks = function(lastUpdateSecs) {
         };
     }
 
-    game.history.push(currentState);
+    game.history.splice(0, 0, currentState);
+    if (game.history.length >= game.historyLength) {
+        game.history.pop();
+    }
 }
