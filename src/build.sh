@@ -16,7 +16,9 @@ echo ""
 
 echo "Finished: "$(date +%c)
 
-cp ../web/* /c/inetpub/wwwroot/Stuff/ludum31
+#cp ../web/* /c/inetpub/wwwroot/Stuff/ludum31
+cp ../web/* /var/www/html/web/ludum31
+cp ../web/media/* /var/www/html/web/ludum31/media
 
 #chromium-browser http://127.0.0.1/web/tanks/receiver.html
 #windows

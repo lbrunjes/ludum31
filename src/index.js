@@ -3,7 +3,7 @@ var  gameInstance = function(){
 
 	this.activeScreen = "entireGame";
 
-	this.font = "";
+	this.font = "komika-axis";
 	this.fontSize = 16;
 
 	this.width =640;
@@ -38,9 +38,11 @@ var  gameInstance = function(){
 	this.startup = function(){
 
 		diesel.fpsLimit = 60;
-
+		game.screens[game.activeScreen].reset();
 
 		diesel.raiseEvent("createStocks");
+
+
 
 
 	};

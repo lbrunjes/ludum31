@@ -6,30 +6,44 @@ this.screens = {
 this.screens.theScreen= function(){
 
 	this.selectedStock = "xxx";
+	this.buySound =false;
+	this.sellSound =false;
+
+	this.reset = function(){
+		this.buySound = document.getElementById("buy");
+		this.sellSound = document.getElementById("sell");
+	}
 
 	this.clickZones = [
-		//change stock
-		{	x:game.width/3,
+		
+		{	x:0,
 			y:0,
-			w:game.width/3,
-			h:game.height/2,
-			click:function(){}
-		},
-		// buy buy buy
-		{	x:,
-			y:,
-			w:,
-			h:,
-			click:function(){}
-		},
+			w:window.innerWidth,
+			h:window.innerHeight,
+			click:function(){
+				
+				if(diesel.mouseX >game.width/3*2 && 
+					diesel.mouseX <game.width &&
+					diesel.mouseY < game.height/2){
 
-		//sell sell sell
-		{	x:,
-			y:,
-			w:,
-			h:,
-			click:function(){}
+					if(diesel.mouseY < game.height/4){
+						game.screens.entireGame.buySound.pause();
+						game.screens.entireGame.buySound.currentTime=0;
+						game.screens.entireGame.buySound.play();
+					}
+					else{
+						game.screens.entireGame.sellSound.pause();
+						game.screens.entireGame.sellSound.currentTime =0;
+						game.screens.entireGame.sellSound.play();
+					}
+
+				}
+
+
+
+			}
 		},
+		
 
 
 	];
@@ -57,6 +71,34 @@ this.screens.theScreen= function(){
 		context.fillStyle = "#fff";
 		context.textAlign = "center";
 		context.fillText("graph",x+w/2 , y+h/2);
+
+		//TODO adjust location and scaling as needed
+		context.save();
+		
+		context.translate(0,h/2);
+
+		var step = w/game.history.length;
+		for(var i = 0; i<game.history.length ; i++){
+			for(var stock in game.history[i]){
+			
+				context.strokeStyle= game.stocks.color || "#fff";
+				context.lineWidth = 1;
+
+				if(stock == this.selectedStock ){
+					context.lineWidth = 3;
+				}
+				context.beginPath();
+
+				context.moveTo(step * (game.history.length -i),
+					game.history[i][stock].currentValue);
+				context.lineTo(step * (game.history.length -i + 1),
+					game.history[i][stock].currentValue + game.history[i][stock].lastChange);
+
+				context.stroke();
+				context.endPath();
+			}
+		}
+		context.restore();
 
 	}
 

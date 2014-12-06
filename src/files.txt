@@ -1,7 +1,7 @@
 index.js
 events/index.js
 events/createStocks.js
-events/updateStock.js
+events/updateStocks.js
 objects/index.js
 objects/stock.js
 screens/index.js
