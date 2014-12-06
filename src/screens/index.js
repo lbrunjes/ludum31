@@ -29,26 +29,41 @@ this.screens.theScreen= function(){
 			h:window.innerHeight,
 			click:function(){
 				
-				//the buy and sell buttons
-				if(diesel.mouseX >game.width/6*5 && 
-					diesel.mouseX <game.width &&
-					diesel.mouseY < game.height/2){
+				if(diesel.mouseY < game.height/3*2){
+					//the buy and sell buttons
+					if(diesel.mouseX >game.width/6*5 && 
+						diesel.mouseX <game.width
+					){
 
-					if(diesel.mouseY < game.height/4){
-						game.screens.entireGame.buyCurrentStock();
-					}
-					else{
-						game.screens.entireGame.sellCurrentStock();
-					}
+						if(diesel.mouseY < game.height/4){
+							game.screens.entireGame.buyCurrentStock();
+						}
+						else{
+							game.screens.entireGame.sellCurrentStock();
+						}
 
+					}
+					//the next selected stock
+					if(diesel.mouseX > game.width/3*2 && 
+						diesel.mouseX <game.width/6*5){
+							game.screens.entireGame.nextStock();
+					}
 				}
-				//the next selected stock
-				if(diesel.mouseX > game.width/3*2 && 
-					diesel.mouseX <game.width/6*5 &&
-					diesel.mouseY < game.height/3*2){
-						game.screens.entireGame.nextStock();
-					
+				else{
+									//set teh selected ticker to the one we clicked
+					if(diesel.mouseX > game.width/3 && diesel.mouseY < game.width/6*5){
+						var step = game.width/3*2/game.tickers.length;
+						var i = Math.floor((diesel.mouseX - (game.width/3))/step);
+						
+						this.actions++;
+						game.screens.entireGame.selectedStock = game.tickers[i];
 
+						game.screens.entireGame.thbbSound.pause();
+						game.screens.entireGame.thbbSound.currentTime = 0;
+						game.screens.entireGame.thbbSound.play();
+
+
+					}	
 				}
 
 
