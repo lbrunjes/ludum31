@@ -2,7 +2,7 @@
 var  gameInstance = function(){
 
 	this.activeScreen = "entireGame";
-	
+
 	this.font = "";
 	this.fontSize = 16;
 

@@ -7,6 +7,35 @@ this.screens.theScreen= function(){
 
 	this.selectedStock = "xxx";
 
+	this.clickZones = [
+		//change stock
+		{	x:game.width/3,
+			y:0,
+			w:game.width/3,
+			h:game.height/2,
+			click:function(){}
+		},
+		// buy buy buy
+		{	x:,
+			y:,
+			w:,
+			h:,
+			click:function(){}
+		},
+
+		//sell sell sell
+		{	x:,
+			y:,
+			w:,
+			h:,
+			click:function(){}
+		},
+
+
+	];
+
+	
+
 	this.draw =function(){
 
 		game.context.main.clearRect(0,0,game.width, game.height);
@@ -25,12 +54,18 @@ this.screens.theScreen= function(){
 	this.drawGraph = function(context, hist, x, y, w, h){
 		context.fillStyle="#000";
 		context.fillRect(x, y ,w ,h );
+		context.fillStyle = "#fff";
+		context.textAlign = "center";
+		context.fillText("graph",x+w/2 , y+h/2);
 
 	}
 
 	this.drawStock = function(context, stockName, x,y,w,h){
 		context.fillStyle = "#999";
 		context.fillRect(x, y, w, h);
+		context.fillStyle = "#fff";
+		context.textAlign = "center";
+		context.fillText("stock",x+w/2 , y+h/2);
 	}
 
 
