@@ -194,6 +194,7 @@ this.screens.theScreen= function(){
 		this.actions++;
 		
 		if(game.cash &&
+			game.history[0]&&
 			game.history[0][this.selectedStock] &&
 			game.cash >= game.history[0][this.selectedStock].currentValue){
 
