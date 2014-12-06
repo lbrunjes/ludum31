@@ -21,6 +21,8 @@ this.objects.stock = function(name, ticker, imagePath){
         else{
             _lastChange = 0;
             // TODO? what do we do with companies that reach negative stock prices? drop them?
+
+            //possilby remo teh negative money from teh player.
         }
 
         _currentValue = _currentValue + _lastChange;

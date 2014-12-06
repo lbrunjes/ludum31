@@ -4,7 +4,7 @@ this.screens = {
 
 this.screens.theScreen= function(){
 
-	this.selectedStock = "⚒";
+	this.selectedStock = "☃";
 	this.buySound =false;
 	this.sellSound =false;
 	this.errSound = false;
@@ -85,11 +85,11 @@ this.screens.theScreen= function(){
 		//draw a rect for the graph
 		this.drawGraph(game.context.main, game.history, 0,0, game.width/3*2, game.height/3*2);
 
-		//draw current stock
-		this.drawStock(game.context.main, this.selectedStock, game.width/3*2, 0, game.width/6,game.height/3*2);
-
 		//draw buy buttons
 		this.drawButtons(game.context.main, game.width/6*5, 0, game.width/6, game.height/3*2);
+
+		//draw current stock
+		this.drawStock(game.context.main, this.selectedStock, game.width/3*2, 0, game.width/6,game.height/3*2);
 
 		//draw the bottom chrome
 		this.drawChrome(game.context.main, 0,game.height/3*2, game.width, game.height/3);
@@ -161,7 +161,7 @@ this.screens.theScreen= function(){
 
 		context.fillStyle = "#000";
 		context.textAlign = "center";
-		var tsize = h/2;
+		var tsize = h/3*2;
 		context.font = tsize+"px monospace";
 		context.fillText(this.selectedStock, x+w/2 , y+h/3*2);
 
@@ -175,10 +175,10 @@ this.screens.theScreen= function(){
 		context.font = game.fontSize+"px "+game.font;
 
 		context.fillText("NAME",x+w/2 , y+h/3*2 + game.fontSize *3);
-		context.fillText(Math.round(game.stocks[this.selectedStock].getCurrentValue()*100)/100, 
+		context.fillText("£: "+Math.round(game.stocks[this.selectedStock].getCurrentValue()*100)/100, 
 			x+w/2 , y+h/3*2 + game.fontSize *5);
-		context.fillText(Math.round(game.stocks[this.selectedStock].getLastChange()*100)/100, 
-			x+w/2 , y+h/3*2 + game.fontSize *7);
+		context.fillText("±: "+Math.round(game.stocks[this.selectedStock].getLastChange()*100)/100, 
+			x+w/2 , y+h/3*2 + game.fontSize *6);
 
 	}
 
@@ -221,6 +221,7 @@ this.screens.theScreen= function(){
 		context.font = ltext+"px komika-axis";
 		context.fillText("CASH:"+Math.round(game.user.getCurrentCash()),x +16,y+ lineh -16 );
 		context.fillText("APM:"+this.getAPM(),x +16,y+lineh*2 -16 );
+		context.fillText("WAHT GOES HERE FOR>"+this.getAPM(),x +16,y +lineh*3);
 		
 		context.save();
 			context.textAlign = "center";
