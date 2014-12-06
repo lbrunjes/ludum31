@@ -9,8 +9,6 @@ var  gameInstance = function(){
 	this.width =640;
 	this.height = 480;
 
-	this.cash =100;
-
 	this.tickers =["⚗",
 		"⚒",
 		"⚙",
@@ -25,9 +23,7 @@ var  gameInstance = function(){
 		"♖",
 		"♞"]
 
-	this.stocks = {
-		
-	};
+	this.stocks = {};
 
 	this.history =[];
 	this.historyLength = 300;
@@ -57,7 +53,7 @@ var  gameInstance = function(){
         game.user = new game.objects.user(500);
 
 		diesel.raiseEvent("createStocks");
-
+        diesel.raiseEvent("updateStocks");
 
 
 
