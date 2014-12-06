@@ -11,9 +11,22 @@ var  gameInstance = function(){
 
 	this.cash =100;
 
-	this.stocks = {
-		"AAA":{}
+	this.tickers =["⚗",
+		"⚒",
+		"⚙",
+		"♂",
+		"♀",
+		"☣",
+		"☘",
+		"☃",
+		"☕",
+		"☭",
+		"☮",
+		"♖",
+		"♞"]
 
+	this.stocks = {
+		
 	};
 
 	this.history =[];

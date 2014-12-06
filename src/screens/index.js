@@ -5,7 +5,7 @@ this.screens = {
 
 this.screens.theScreen= function(){
 
-	this.selectedStock = "xxx";
+	this.selectedStock = "X";
 	this.buySound =false;
 	this.sellSound =false;
 	this.errSound = false;
@@ -124,13 +124,29 @@ this.screens.theScreen= function(){
 	this.drawStock = function(context, stockName, x,y,w,h){
 		context.fillStyle = "#999";
 		context.fillRect(x, y, w, h);
-		context.fillStyle = "#fff";
+
+		context.fillStyle = "#000";
 		context.textAlign = "center";
-		context.fillText("stock",x+w/2 , y+h/2);
+		var tsize = h/2;
+		context.font = tsize+"px monospace";
+		context.fillText(this.selectedStock, x+w/2 , y+h/3*2);
+
+		tsize -= 10;
+		context.fillStyle = "#fff";
+		context.font = tsize+"px monospace";
+		context.fillText(this.selectedStock, x+w/2 , y+h/3*2);
+		context.font = game.fontSize+"px "+game.font;
+
+		context.fillText("NAME",x+w/2 , y+h/3*2 + game.fontSize *3);
+		context.fillText("LAST PERF?",x+w/2 , y+h/3*2 + game.fontSize *5);
+
 	}
 
 
 	this.drawButtons=function(context, x, y, w, h){
+
+		game.context.main.font = "32px komika-axis";
+
 
 		context.fillStyle= "#327337";
 		context.fillRect(x,y,w,h/2);
@@ -206,6 +222,7 @@ this.screens.theScreen= function(){
 			// AWARD ST0CK
 
 			game.cash -= game.history[0][this.selectedStock].currentValue;
+
 		}
 		else{
 			this.errSound.pause();
@@ -222,6 +239,8 @@ this.screens.theScreen= function(){
 			this.sellSound.pause();
 			this.sellSound.currentTime =0;
 			this.sellSound.play();
+
+			//game.cash +=
 		}
 		else{
 			this.errSound.pause();
@@ -234,6 +253,9 @@ this.screens.theScreen= function(){
 	this.nextStock =function(){
 		console.log("nextStock", this.selectedStock);
 		this.actions++;
+
+		var i = ((game.tickers.indexOf(this.selectedStock)||0)+1)%game.tickers.length;
+		this.selectedStock = game.tickers[i];
 
 		this.thbbSound.pause();
 		this.thbbSound.currentTime = 0;
