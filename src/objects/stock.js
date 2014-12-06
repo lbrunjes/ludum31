@@ -1,14 +1,16 @@
 this.objects.stock = function(name, ticker, imagePath){
 
     var _initialValue = Math.random() / (Math.random() * Math.random());
-    var _currentValue;
-    var _lastChange;
+    var _currentValue = _initialValue;
+    var _lastChange =0;
 
 	this.name = name;
 	this.ticker = ticker;
     this.imagePath = imagePath;
+    this.color = "#fff"
 
 	this.init= function() {
+        this.color = "#"+Math.floor(Math .random() *0x9ff+600).toString(16);
 	};
 
 	this.update = function () {

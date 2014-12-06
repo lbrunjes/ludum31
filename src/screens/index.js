@@ -106,29 +106,39 @@ this.screens.theScreen= function(){
 		context.fillText("graph",x+w/2 , y+h/2);
 
 		//TODO adjust location and scaling as needed
+		var min = 99999999;
+		var max = -1000000;
+
+		for(var stock in game.stocks){
+			max = Math.max(game.stocks[stock].getCurrentValue(), max);
+			min = Math.min(game.stocks[stock].getCurrentValue(), min)
+		}
+		vertscale = h/(max -min);
+
 		context.save();
-		
-		context.translate(0,h/2);
+		console.log(min , max, vertscale, ((max-min)/2));
+		context.translate(0, h );
+		context.scale(1,-1*vertscale);
 
 		var step = w/game.history.length;
 		for(var i = 0; i<game.history.length ; i++){
 			for(var stock in game.history[i]){
-			
-				context.strokeStyle= game.stocks.color || "#fff";
-				context.lineWidth = 1;
+				
+				context.strokeStyle= (game.stocks[stock].color || "#fff");
 
+				context.lineWidth = 1/vertscale;
 				if(stock == this.selectedStock ){
-					context.lineWidth = 3;
+					context.lineWidth = 3/vertscale;
 				}
+				
 				context.beginPath();
-
-				context.moveTo(step * (game.history.length -i),
+				context.moveTo( w- step * i,
 					game.history[i][stock].currentValue);
-				context.lineTo(step * (game.history.length -i + 1),
-					game.history[i][stock].currentValue + game.history[i][stock].lastChange);
+				context.lineTo(w - step * (i + 1),
+					game.history[i][stock].currentValue - game.history[i][stock].lastChange);
 
 				context.stroke();
-				context.endPath();
+				
 			}
 		}
 		context.restore();
@@ -204,11 +214,12 @@ this.screens.theScreen= function(){
 			for(var i = 0 ; i < game.tickers.length;i++){
 				context.fillStyle ="#000";
 				context.fillRect(i*step, 0, ltext, lineh*2 -32); 
-				context.fillStyle= "#fff";
+				context.fillStyle= game.stocks[game.tickers[i]].color;
 				context.font = ltext+"px komika-axis";
 		
 				context.fillText(game.tickers[i], i*step +(ltext/2), ltext);
 				
+				context.fillStyle = "#fff";
 				context.font = ltext/2+"px komika-axis";
 		
 				context.fillText(assets[game.tickers[i]]|| 0, i*step +ltext/2, ltext *2 +24);
@@ -226,15 +237,7 @@ this.screens.theScreen= function(){
 
 	this.update =function(ticks){
 
-		diesel.raiseEvent("updateStock", ticks);
-
-
-		while(game.history.length > game.historyLength){
-			//remove teh last item
-			game.history.splice(game.historyLength,1);
-		}
-
-
+		diesel.raiseEvent("updateStocks", ticks);
 
 	};
 
