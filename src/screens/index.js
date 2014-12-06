@@ -12,13 +12,13 @@ this.screens.theScreen= function(){
 		game.context.main.clearRect(0,0,game.width, game.height);
 
 		//draw a rect for the graph
-		this.drawGraph(game.context.main, game.history, 50,50, 300, 600);
+		this.drawGraph(game.context.main, game.history, 0,0, game.width/3, game.height/2);
 
 		//draw current stock
-		this.drawStock(game.context.main, this.selectedStock, 350, 50, 150,300);
+		this.drawStock(game.context.main, this.selectedStock, game.width/3, 0, game.width/3,game.height/2);
 
 		//draw buy buttons
-		this.drawButtons(game.context.main, 500, 50, 100, 600);
+		this.drawButtons(game.context.main, game.width/3*2, 0, game.width/3, game.height/2);
 
 	}
 
@@ -44,8 +44,8 @@ this.screens.theScreen= function(){
 
 		context.fillStyle = "#fff";
 		context.textAlign = "center";
-		context.fillText("BUY", x+w/2, w+h/4);
-		context.fillText("SELL", x+w/2, w+h/4*3);
+		context.fillText("BUY", x+w/2, y+h/4);
+		context.fillText("SELL", x+w/2, y+h/4*3);
 
 	}
 
