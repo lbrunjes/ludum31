@@ -4,7 +4,7 @@ this.screens = {
 
 this.screens.theScreen= function(){
 
-	this.selectedStock = "X";
+	this.selectedStock = "⚒";
 	this.buySound =false;
 	this.sellSound =false;
 	this.errSound = false;
@@ -106,20 +106,27 @@ this.screens.theScreen= function(){
 		context.fillText("graph",x+w/2 , y+h/2);
 
 		//TODO adjust location and scaling as needed
-		var min = 99999999;
+		var min = 9999999999;
 		var max = -1000000;
 
 		for(var stock in game.stocks){
 			max = Math.max(game.stocks[stock].getCurrentValue(), max);
 			min = Math.min(game.stocks[stock].getCurrentValue(), min)
 		}
-		vertscale = h/(max -min);
+
+
+		var range = max -min;
+		vertscale = h / (range *2);
 
 		context.save();
-		console.log(min , max, vertscale, ((max-min)/2));
-		context.translate(0, h );
+		
+		context.translate(0, h);
 		context.scale(1,-1*vertscale);
+		context.translate(0, -min +range/2)
+	
 
+		//TODO draw scale
+		
 		var step = w/game.history.length;
 		for(var i = 0; i<game.history.length ; i++){
 			for(var stock in game.history[i]){
@@ -128,7 +135,8 @@ this.screens.theScreen= function(){
 
 				context.lineWidth = 1/vertscale;
 				if(stock == this.selectedStock ){
-					context.lineWidth = 3/vertscale;
+					context.lineWidth = 5/vertscale;
+
 				}
 				
 				context.beginPath();
@@ -162,7 +170,8 @@ this.screens.theScreen= function(){
 		context.font = game.fontSize+"px "+game.font;
 
 		context.fillText("NAME",x+w/2 , y+h/3*2 + game.fontSize *3);
-		context.fillText("LAST PERF?",x+w/2 , y+h/3*2 + game.fontSize *5);
+		context.fillText(Math.round(game.stocks[this.selectedStock].getCurrentValue()*100)/100, 
+			x+w/2 , y+h/3*2 + game.fontSize *5);
 
 	}
 
@@ -203,7 +212,7 @@ this.screens.theScreen= function(){
 		context.fillStyle= "#fff";
 		context.textAlign = "left";
 		context.font = ltext+"px komika-axis";
-		context.fillText("CASH:"+game.user.getCurrentCash(),x +16,y+ lineh -16 );
+		context.fillText("CASH:"+Math.round(game.user.getCurrentCash()),x +16,y+ lineh -16 );
 		context.fillText("APM:"+this.getAPM(),x +16,y+lineh*2 -16 );
 		
 		context.save();

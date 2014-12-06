@@ -14,7 +14,7 @@ this.objects.stock = function(name, ticker, imagePath){
 	};
 
 	this.update = function () {
-        _lastChange = ((Math.random > 0.5) ? -1 : 1) * (Math.random() / Math.random());
+        _lastChange = ((Math.random() > 0.5) ? -1 : 1) * diesel.clamp(Math.random() / Math.random(), -50,50);
         _currentValue = _currentValue + _lastChange;
  	};
 

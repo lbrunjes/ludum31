@@ -25,6 +25,7 @@ this.objects.user = function (initialCash) {
         if (_currentCash >= cost) {
             if (_assets[stock.ticker]) {
                 _assets[stock.ticker] += 1;
+                _currentCash -= stock.currentValue;
             } else {
                 _assets[stock.ticker] = 1;
             }
