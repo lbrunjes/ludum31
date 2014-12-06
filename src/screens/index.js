@@ -30,7 +30,11 @@ this.screens.theScreen= function(){
 			click:function(){
 
 				//the buy and sell buttons
+<<<<<<< HEAD
 				if(diesel.mouseX >game.width/3*2 &&
+=======
+				if(diesel.mouseX >game.width/6*5 &&
+>>>>>>> origin/master
 					diesel.mouseX <game.width &&
 					diesel.mouseY < game.height/2){
 
@@ -43,8 +47,13 @@ this.screens.theScreen= function(){
 
 				}
 				//the next selected stock
+<<<<<<< HEAD
 				if(diesel.mouseX > game.width/3 &&
 					diesel.mouseX <game.width/3*2 &&
+=======
+				if(diesel.mouseX > game.width/3*2 &&
+					diesel.mouseX <game.width/6*5 &&
+>>>>>>> origin/master
 					diesel.mouseY < game.height/3*2){
 						game.screens.entireGame.nextStock();
 
@@ -69,13 +78,13 @@ this.screens.theScreen= function(){
 		game.context.main.clearRect(0,0,game.width, game.height);
 
 		//draw a rect for the graph
-		this.drawGraph(game.context.main, game.history, 0,0, game.width/3, game.height/3*2);
+		this.drawGraph(game.context.main, game.history, 0,0, game.width/3*2, game.height/3*2);
 
 		//draw current stock
-		this.drawStock(game.context.main, this.selectedStock, game.width/3, 0, game.width/3,game.height/3*2);
+		this.drawStock(game.context.main, this.selectedStock, game.width/3*2, 0, game.width/6,game.height/3*2);
 
 		//draw buy buttons
-		this.drawButtons(game.context.main, game.width/3*2, 0, game.width/3, game.height/3*2);
+		this.drawButtons(game.context.main, game.width/6*5, 0, game.width/6, game.height/3*2);
 
 		//draw the bottom chrome
 		this.drawChrome(game.context.main, 0,game.height/3*2, game.width, game.height/3);
@@ -166,23 +175,47 @@ this.screens.theScreen= function(){
 		context.fillStyle= "#9f9";
 		context.fillRect(x,y,w,h);
 		var lineh = h/4;
+		var ltext = lineh -32;
 
 
 		context.fillStyle= "#000";
 
-		context.fillRect(x +16,y+16, w/3-32, lineh -32);
-		context.fillRect(x +16,y +lineh +16, w/3-32, lineh -32);
-		context.fillRect(x +16,y +lineh *2 +16, w/3-32, lineh*2 -32);
+		context.fillRect(x +16,y+16, w/3-32, ltext);
+		context.fillRect(x +16,y +lineh +16, w/3-32, ltext);
+
+<<<<<<< HEAD
 
 
-
+=======
+		context.fillRect(x +16,y +lineh *2 +16, w-32, lineh*2 -32);
+>>>>>>> origin/master
 
 		context.fillStyle= "#fff";
 		context.textAlign = "left";
-		context.font = (lineh-32)+"px komika-axis";
-		context.fillText("CASH:"+game.cash,x +16,y+ lineh -16 );
+		context.font = ltext+"px komika-axis";
+		context.fillText("CASH:"+game.user.getCurrentCash(),x +16,y+ lineh -16 );
 		context.fillText("APM:"+this.getAPM(),x +16,y+lineh*2 -16 );
 
+		context.save();
+			context.textAlign = "center";
+			context.translate(x + w/3, y+16);
+			var step = w/3*2 /game.tickers.length;
+			var assets = game.user.getAssets();
+			for(var i = 0 ; i < game.tickers.length;i++){
+				context.fillStyle ="#000";
+				context.fillRect(i*step, 0, ltext, lineh*2 -32);
+				context.fillStyle= "#fff";
+				context.font = ltext+"px komika-axis";
+
+				context.fillText(game.tickers[i], i*step +(ltext/2), ltext);
+
+				context.font = ltext/2+"px komika-axis";
+
+				context.fillText(assets[game.tickers[i]]|| 0, i*step +ltext/2, ltext *2 +24);
+
+
+			}
+		context.restore();
 
 	}
 	this.getAPM=function(){
@@ -209,34 +242,42 @@ this.screens.theScreen= function(){
 		console.log("buy", this.selectedStock);
 		this.actions++;
 
-        if (game.user &&
-            game.history[0] &&
-            game.history[0][this.selectedStock] &&
-            game.user.purchaseStock(game.history[0][this.selectedStock])) {
+		if(game.user &&
+           game.history[0]&&
+			game.history[0][this.selectedStock] &&
+			game.user.purchaseStock(game.history[0][this.selectedStock])){
 
-            this.buySound.pause();
-            this.buySound.currentTime=0;
-            this.buySound.play();
-        } else {
-            this.errSound.pause();
-            this.errSound.currentTime =0;
-            this.errSound.play();
-        }
+			this.buySound.pause();
+			this.buySound.currentTime=0;
+			this.buySound.play();
+
+
+			// AWARD ST0CK
+
+
+		}
+		else{
+			this.errSound.pause();
+			this.errSound.currentTime =0;
+			this.errSound.play();
+		}
+
 	};
 
 	this.sellCurrentStock = function(){
 		console.log("sell", this.selectedStock);
 		this.actions++;
 
-        if (game.user &&
-            game.history[0] &&
-            game.history[0][this.selectedStock] &&
-            game.user.sellStock(game.history[0][this.selectedStock])) {
-
+		if(game.user &&
+            game.history[0]&&
+			game.history[0][this.selectedStock] &&
+			game.user.sellStock(game.history[0][this.selectedStock])){
 			this.sellSound.pause();
 			this.sellSound.currentTime =0;
 			this.sellSound.play();
-		} else {
+
+		}
+		else{
 			this.errSound.pause();
 			this.errSound.currentTime =0;
 			this.errSound.play();
