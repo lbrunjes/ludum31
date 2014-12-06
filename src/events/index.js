@@ -1,1 +1,3 @@
-game.prototype.events = {};
+if(this.events){
+	this.events={};
+}

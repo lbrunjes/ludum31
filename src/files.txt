@@ -1,2 +1,8 @@
 index.js
-end.js
+events/index.js
+events/createStocks.js
+events/updateStock.js
+objects/index.js
+objects/stock.js
+screens/index.js
+end.jsb

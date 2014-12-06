@@ -1,8 +1,17 @@
 
 var  gameInstance = function(){
 
+	this.activeScreen = "entireGame";
+	this.width =640;
+	this.height = 480;
 
+	this.stocks = {
+		"AAA":{}
 
+	};
+
+	this.history =[];
+	this.historyLength = 300;
 
 	this.context = {
 
@@ -12,6 +21,8 @@ var  gameInstance = function(){
 	//the dom is likely not to be  loaded
 	//diesel may not exist.
 	this.init = function(){
+		this.width = window.innerWidth;
+		this.height =window.innerHeight;
 
 	};
 
@@ -20,14 +31,12 @@ var  gameInstance = function(){
 	//diesel should exist
 	this.startup = function(){
 
+		diesel.fpsLimit = 60;
+
+
+		diesel.raiseEvent("createStocks");
+
 
 	};
 
-	this.screens = {};
-	this.events = {};
-	this.objects = {};
-
-
-}
-gameInstance.prototype = new diesel.proto.game();
 
