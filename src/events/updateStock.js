@@ -1,4 +1,0 @@
-this.events.updateStock =function(){
-
-
-}
