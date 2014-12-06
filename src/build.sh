@@ -2,7 +2,7 @@
 VERSION="0.0.1"
 echo "building fromfiles.txt"
 echo "// built at "$(date +%c) > game-$VERSION.js
-echo "var GAME_VERSION = $VERSION;" >> game-$VERSION.js
+echo "var GAME_VERSION = '$VERSION';" >> game-$VERSION.js
 
 cat files.txt| while read line; do
 	cat $line >> game-$VERSION.js

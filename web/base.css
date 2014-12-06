@@ -1,1 +1,8 @@
-base.css
+*{
+	padding:0;
+	margin:0;
+	display:block;
+}
+head, head *, script{
+	display:none;
+}

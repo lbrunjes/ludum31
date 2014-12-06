@@ -5,4 +5,4 @@ events/updateStock.js
 objects/index.js
 objects/stock.js
 screens/index.js
-end.jsb
+end.js

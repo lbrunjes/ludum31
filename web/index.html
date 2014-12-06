@@ -1,1 +1,21 @@
-index.html
+<!doctype>
+<html>
+<head>
+<title>Ludum Dare</title>
+<link rel="stylesheet" type="text/css" media="all" href="base.css" />
+<script src="diesel-0.7.1.js"></script>
+<script src="game.js"></script>
+<script>
+	document.addEventListener("DOMContentLoaded", function(){
+		diesel.start(game);
+	}, false);
+</script>
+</head>
+<body>
+<div id="wrap">
+	<div id="game">
+		<canvas id="main"></canvas>
+	</div>
+</div>
+</body>
+</html>

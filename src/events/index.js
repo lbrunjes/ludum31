@@ -1,3 +1,3 @@
-if(this.events){
+if(!this.events){
 	this.events={};
 }

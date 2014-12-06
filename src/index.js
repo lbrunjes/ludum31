@@ -2,6 +2,10 @@
 var  gameInstance = function(){
 
 	this.activeScreen = "entireGame";
+	
+	this.font = "";
+	this.fontSize = 16;
+
 	this.width =640;
 	this.height = 480;
 
@@ -14,7 +18,7 @@ var  gameInstance = function(){
 	this.historyLength = 300;
 
 	this.context = {
-
+		"main":"2d"
 	};
 
 	this.items = {}
