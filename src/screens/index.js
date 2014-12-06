@@ -8,10 +8,15 @@ this.screens.theScreen= function(){
 	this.selectedStock = "xxx";
 	this.buySound =false;
 	this.sellSound =false;
+	this.errSound = false;
+	this.thbbSound =false
 
 	this.reset = function(){
 		this.buySound = document.getElementById("buy");
 		this.sellSound = document.getElementById("sell");
+		this.errSound = document.getElementById("err");
+		this.thbbSound = document.getElementById("thbb");
+
 	}
 
 	this.clickZones = [
@@ -27,14 +32,10 @@ this.screens.theScreen= function(){
 					diesel.mouseY < game.height/2){
 
 					if(diesel.mouseY < game.height/4){
-						game.screens.entireGame.buySound.pause();
-						game.screens.entireGame.buySound.currentTime=0;
-						game.screens.entireGame.buySound.play();
+						game.screens.entireGame.buyCurrentStock();
 					}
 					else{
-						game.screens.entireGame.sellSound.pause();
-						game.screens.entireGame.sellSound.currentTime =0;
-						game.screens.entireGame.sellSound.play();
+						game.screens.entireGame.sellCurrentStock();
 					}
 
 				}
@@ -139,6 +140,45 @@ this.screens.theScreen= function(){
 
 
 
+	};
+
+	this.buyCurrentStock=function(){
+		console.log("buy", this.selectedStock);
+
+		if(game.cash &&
+			game.history[0][this.selectedStock] &&
+			game.cash >= game.history[0][this.selectedStock].currentValue){
+
+			this.buySound.pause();
+			this.buySound.currentTime=0;
+			this.buySound.play();
+
+			// AWARD ST0CK
+
+			game.cash -= game.history[0][this.selectedStock].currentValue;
+		}
+		else{
+			this.errSound.pause();
+			this.errSound.currentTime =0;
+			this.errSound.play();
+		}
+						
+	};
+
+	this.sellCurrentStock = function(){
+		console.log("sell", this.selectedStock);
+
+		if(Math.random() >.5){
+			this.sellSound.pause();
+			this.sellSound.currentTime =0;
+			this.sellSound.play();
+		}
+		else{
+			this.errSound.pause();
+			this.errSound.currentTime =0;
+			this.errSound.play();
+		}
+		
 	};
 
 };
