@@ -17,6 +17,8 @@ var  gameInstance = function(){
 
 	};
 
+	this.items = {}
+
 	//called at instance creation.
 	//the dom is likely not to be  loaded
 	//diesel may not exist.

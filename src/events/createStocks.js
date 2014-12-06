@@ -1,0 +1,4 @@
+
+this.events.createStocks = function(){
+
+};
