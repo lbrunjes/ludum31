@@ -116,16 +116,18 @@ this.screens.theScreen= function(){
 
 
 		var range = max -min;
-		vertscale = h / (range *2);
+		vertscale = h / (range *1.5);
 
 		context.save();
 		
 		context.translate(0, h);
 		context.scale(1,-1*vertscale);
-		context.translate(0, -min +range/2)
+		context.translate(0, -min +range/4)
 	
 
 		//TODO draw scale
+
+		context.fillRect(0,-1,w,1);
 		
 		var step = w/game.history.length;
 		for(var i = 0; i<game.history.length ; i++){
@@ -165,6 +167,9 @@ this.screens.theScreen= function(){
 
 		tsize -= 10;
 		context.fillStyle = "#fff";
+		if(game.stocks[this.selectedStock].getCurrentValue() <=0){
+			context.fillStyle = "#f00";
+		}
 		context.font = tsize+"px monospace";
 		context.fillText(this.selectedStock, x+w/2 , y+h/3*2);
 		context.font = game.fontSize+"px "+game.font;
@@ -172,6 +177,8 @@ this.screens.theScreen= function(){
 		context.fillText("NAME",x+w/2 , y+h/3*2 + game.fontSize *3);
 		context.fillText(Math.round(game.stocks[this.selectedStock].getCurrentValue()*100)/100, 
 			x+w/2 , y+h/3*2 + game.fontSize *5);
+		context.fillText(Math.round(game.stocks[this.selectedStock].getLastChange()*100)/100, 
+			x+w/2 , y+h/3*2 + game.fontSize *7);
 
 	}
 
@@ -220,19 +227,21 @@ this.screens.theScreen= function(){
 			context.translate(x + w/3, y+16);
 			var step = w/3*2 /game.tickers.length;
 			var assets = game.user.getAssets();
+			
 			for(var i = 0 ; i < game.tickers.length;i++){
-				context.fillStyle ="#000";
-				context.fillRect(i*step, 0, ltext, lineh*2 -32); 
-				context.fillStyle= game.stocks[game.tickers[i]].color;
-				context.font = ltext+"px komika-axis";
-		
-				context.fillText(game.tickers[i], i*step +(ltext/2), ltext);
-				
-				context.fillStyle = "#fff";
-				context.font = ltext/2+"px komika-axis";
-		
-				context.fillText(assets[game.tickers[i]]|| 0, i*step +ltext/2, ltext *2 +24);
-
+				if(game.stocks[game.tickers[i]].getCurrentValue() > 0 ){
+					context.fillStyle ="#000";
+					context.fillRect(i*step, 0, ltext, lineh*2 -32); 
+					context.fillStyle= game.stocks[game.tickers[i]].color;
+					context.font = ltext+"px komika-axis";
+			
+					context.fillText(game.tickers[i], i*step +(ltext/2), ltext);
+					
+					context.fillStyle = "#fff";
+					context.font = ltext/2+"px komika-axis";
+			
+					context.fillText(assets[game.tickers[i]]|| 0, i*step +ltext/2, ltext *2 +24);
+				}
 
 			}
 		context.restore();

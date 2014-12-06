@@ -4,15 +4,16 @@ this.events.updateStocks = function(lastUpdateSecs) {
 
     for (var stockname in game.stocks) {
         var stock = game.stocks[stockname];
-
-        stock.update();
-        currentState[stock.ticker] = {
-            name: stock.name,
-            ticker: stock.ticker,
-            imagePath: stock.imagePath,
-            currentValue: stock.getCurrentValue(),
-            lastChange: stock.getLastChange()
-        };
+        if(stock.getCurrentValue() >0 ){
+            stock.update();
+            currentState[stock.ticker] = {
+                name: stock.name,
+                ticker: stock.ticker,
+                imagePath: stock.imagePath,
+                currentValue: stock.getCurrentValue(),
+                lastChange: stock.getLastChange()
+            };
+        }
     }
 
     game.history.splice(0, 0, currentState);

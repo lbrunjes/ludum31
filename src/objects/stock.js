@@ -1,6 +1,6 @@
 this.objects.stock = function(name, ticker, imagePath){
 
-    var _initialValue = Math.random() / (Math.random() * Math.random());
+    var _initialValue = Math.random() * 100;
     var _currentValue = _initialValue;
     var _lastChange =0;
 
@@ -14,7 +14,15 @@ this.objects.stock = function(name, ticker, imagePath){
 	};
 
 	this.update = function () {
-        _lastChange = ((Math.random() > 0.5) ? -1 : 1) * diesel.clamp(Math.random() / Math.random(), -50,50);
+        if(_currentValue > 0){
+            _lastChange = ((Math.random() > 0.5) ? -1 : 1) * diesel.clamp(Math.random() / Math.random(), -50,50);
+
+        }
+        else{
+            _lastChange = 0;
+            // TODO? what do we do with companies that reach negative stock prices? drop them?
+        }
+
         _currentValue = _currentValue + _lastChange;
  	};
 
