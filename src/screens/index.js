@@ -16,6 +16,7 @@ this.screens.theScreen= function(){
 	this.paused =true;
 	this.endClickCount = 0;
 	this.isBgm = false;
+	this.lastZoom = 1;
 
 	this.reset = function(){
 		if(!this.buySound){
@@ -43,7 +44,7 @@ this.screens.theScreen= function(){
 			w:window.innerWidth,
 			h:window.innerHeight,
 			click:function(){
-				if(diesel.mouseX <32 &&diesel.mouse < 32){
+				if(diesel.mouseX <32 && diesel.mouseY < 32){
 					game.screens.entireGame.isBgm  = !game.screens.entireGame.isBgm;
 
 					if(game.screens.entireGame.isBgm){
@@ -178,12 +179,13 @@ this.screens.theScreen= function(){
 		var range = Math.ceil(max - min);
 		range += 100 -(range %100);
 
-		vertscale = h / (range *1.5);
+		vertscale = ((h / (range *1.5)) + this.lastZoom)/2;
+		this.lastZoom = vertscale;
 
 		context.save();
 		
 			context.translate(0, h);
-			context.scale(1,-1*vertscale);
+			context.scale(1,-1*vertscale );
 			context.translate(0,  -min+50 )
 		
 
@@ -244,6 +246,7 @@ this.screens.theScreen= function(){
 
 	}
 
+	///draws teh stock chunk in the top right
 	this.drawStock = function(context, stockName, x,y,w,h){
 		context.fillStyle = "#222";
 		context.fillRect(x, y, w, h);
@@ -287,7 +290,7 @@ this.screens.theScreen= function(){
 
 	}
 
-
+	///buy and sell buttons
 	this.drawButtons=function(context, x, y, w, h){
 
 		game.context.main.font = "32px komika-axis";
@@ -295,9 +298,32 @@ this.screens.theScreen= function(){
 
 		context.fillStyle= "#327337";
 		context.fillRect(x,y,w,h/2);
+		if(diesel.mouseX > x && diesel.mouseY < h/2){
+
+			context.strokeStyle = "rgba(255,255,255,0.25)";
+			context.lineWidth = 5;
+			context.strokeRect(x +10,y+10,w -20,h/2-20)
+			// context.beginPath();
+			// for(var i =0 ; i <h/2;i+=10){
+				
+			// 	context.moveTo(x+10, i );
+			// 	context.lineTo(x+w-20, i);
+			// }
+			// context.stroke();
+			// context.closePath();
+			
+		
+		}
 
 		context.fillStyle= "#D85249";
 		context.fillRect(x,y +h/2,w,h/2);
+		if(diesel.mouseX > x && diesel.mouseY > h/2 &&diesel.mouseY < h){
+
+			context.strokeStyle = "rgba(255,255,255,0.25)";
+			context.lineWidth = 5;
+			context.strokeRect(x +10,y+h/2+10,w -20,h/2-20)
+		
+		}
 
 		context.fillStyle = "#fff";
 		context.textAlign = "center";
@@ -306,6 +332,7 @@ this.screens.theScreen= function(){
 
 	}
 
+	//bottom portion;
 	this.drawChrome= function(context,x,y,w,h){
 
 		context.fillStyle= "#fff";
@@ -331,6 +358,8 @@ this.screens.theScreen= function(){
 		context.fillText("CASH:"+Math.round(game.user.getCurrentCash()),x +16,y+ lineh -16 );
 		context.fillText("APM:"+this.getAPM(),x +16,y+lineh*2 -16 );
 		context.fillText("TIME: "+Math.ceil(this.timeLeft),x +16,y +lineh*3 -16);
+		context.fillText("???: "+ Math.round(this.getAPM()/10 +1), x+16, y+lineh*4 -16);
+		
 		
 		context.save();
 			context.textAlign = "center";
@@ -364,6 +393,7 @@ this.screens.theScreen= function(){
 
 
 	this.update =function(ticks){
+
 
 		for(var i = 0; i <this.balloons.length; i++){
 			this.balloons[i].update(ticks);
