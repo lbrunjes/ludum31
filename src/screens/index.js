@@ -365,7 +365,7 @@ this.screens.theScreen= function(){
 				var assets = game.user.getAssets();
 				for(stk  in assets){
 					if(assets[stk]>0){
-						stock += assets[stk] * game.stocks[stk].getCurrentValue();
+						stock += assets[stk] *Math.max( game.stocks[stk].getCurrentValue(), 0);
 					}
 				}
 
