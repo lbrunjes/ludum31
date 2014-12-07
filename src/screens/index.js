@@ -247,7 +247,7 @@ this.screens.theScreen= function(){
 			context.fillText(this.selectedStock, x+w/2 , y+h/3*2);
 			context.fillStyle = "#f00";
 			context.fillText("X", x+w/2 , y+h/3*2);
-			context.font = tsize/4+"px monospace";
+			context.font = 32+"px monospace";
 			context.fillText("click to change!!!", x+w/2 , y+h/4*3);
 	
 		}
@@ -394,7 +394,7 @@ this.screens.theScreen= function(){
 				}
 
 				
-				var msg =["Game Over", "your score:",Math.round(cash+stock)];
+				var msg =["Game Over", "your score:",Math.round((cash+stock) * (this.getAPM()/10 +1))];
 
 				var b = new game.objects.messageBalloon(msg);
 				this.balloons.push(b);
@@ -406,12 +406,13 @@ this.screens.theScreen= function(){
 	};
 
 	this.buyCurrentStock=function(){
-		this.didAction();
 		
 		if(game.history[0]&&
 			game.history[0][this.selectedStock] &&
 			game.user.purchaseStock(game.history[0][this.selectedStock])){
 
+			this.didAction();
+	
 			this.buySound.pause();
 			this.buySound.currentTime=0;
 			this.buySound.play();
@@ -433,10 +434,13 @@ this.screens.theScreen= function(){
 	};
 
 	this.sellCurrentStock = function(){
-		this.didAction();
 		if(game.history[0]&&
 			game.history[0][this.selectedStock] &&
 			game.user.sellStock(game.history[0][this.selectedStock])){
+
+			this.didAction();
+		
+		
 			this.sellSound.pause();
 			this.sellSound.currentTime =0;
 			this.sellSound.play();
