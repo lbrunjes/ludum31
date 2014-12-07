@@ -7,7 +7,7 @@ this.objects.textBalloon =function(text,x,y,time){
 	this.scale = 1;
 	this.scaleTick = .1;
 	this.color = "rgba(255,255,255,.5)";
-	this.r = 2*Math.PI + Math.random()
+	this.r =  Math.random()
 
 	this.init =function(){};
 

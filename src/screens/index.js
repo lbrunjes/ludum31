@@ -107,39 +107,74 @@ this.screens.theScreen= function(){
 		context.fillRect(x, y ,w ,h );
 		context.fillStyle = "#fff";
 		context.textAlign = "center";
-		context.fillText("graph",x+w/2 , y+h/2);
-
+		
 		//TODO adjust location and scaling as needed
 		var min = 9999999999;
 		var max = -1000000;
+		var localmax = {};
 
-		for(var stock in game.stocks){
-			max = Math.max(game.stocks[stock].getCurrentValue(), max);
-			min = Math.min(game.stocks[stock].getCurrentValue(), min)
+		for(var i = 0; i<game.history.length ; i++){
+			for(var stock in game.history[i]){
+				max = Math.max(game.history[i][stock].currentValue, max);
+				min = Math.min(game.history[i][stock].currentValue, min);
+				if(!localmax[stock]){
+					localmax[stock] = game.history[i][stock].currentValue;
+				}
+				else{
+					localmax[stock] = Math.max(game.history[i][stock].currentValue, localmax[stock]);
+				}
+			};
 		}
+		min = Math.max(min, 0);
 
+		var range = Math.ceil(max - min);
+		range += 100 -(range %100);
 
-		var range = max -min;
 		vertscale = h / (range *1.5);
 
 		context.save();
 		
 			context.translate(0, h);
 			context.scale(1,-1*vertscale);
-			context.translate(0, -min )
+			context.translate(0,  -min+50 )
 		
 
 			//TODO draw scale
-
-			context.fillRect(0,-1,w,1);
+			context.textAlign = "left";
+			for(var i = 0 ; i < range*2; i+= 50){
+					if(i%100){
+						context.fillStyle ="rgba(255,255,255,0.5)";
+					}
+					else{
+						context.fillStyle ="rgba(255,255,255,1)";
+					}
+					
+					context.fillRect(0,i,w,1);
+					context.save();
+					context.translate(0,i);
+					context.scale(.5,-.5);
+					context.fillText(i,0,0);
+					context.restore();
+					
+			}
 			
 			var step = w/game.history.length;
+			context.textAlign ="right";
 			for(var i = 0; i<game.history.length ; i++){
 				for(var stock in game.history[i]){
 					
-					context.strokeStyle= (game.stocks[stock].color || "#fff");
-
-					context.lineWidth = 1/vertscale;
+					context.strokeStyle= game.stocks[stock].color;
+					if(game.history[i][stock].currentValue == localmax[stock]){
+						context.save()
+						context.translate(w- step * i,
+							game.history[i][stock].currentValue +game.fontSize);
+						context.fillStyle = game.stocks[stock].color;
+						context.fillText(stock,0,0)
+						context.restore();
+					}
+					
+					
+					context.lineWidth = 2/vertscale;
 					if(stock == this.selectedStock ){
 						context.lineWidth = 5/vertscale;
 
@@ -152,6 +187,7 @@ this.screens.theScreen= function(){
 						game.history[i][stock].currentValue - game.history[i][stock].lastChange);
 
 					context.stroke();
+
 					
 				}
 			}
@@ -228,7 +264,7 @@ this.screens.theScreen= function(){
 		context.font = ltext+"px komika-axis";
 		context.fillText("CASH:"+Math.round(game.user.getCurrentCash()),x +16,y+ lineh -16 );
 		context.fillText("APM:"+this.getAPM(),x +16,y+lineh*2 -16 );
-		context.fillText("WAHT GOES HERE FOR>"+this.getAPM(),x +16,y +lineh*3);
+		context.fillText("!!",x +16,y +lineh*3);
 		
 		context.save();
 			context.textAlign = "center";
@@ -275,7 +311,6 @@ this.screens.theScreen= function(){
 	};
 
 	this.buyCurrentStock=function(){
-		console.log("buy", this.selectedStock);
 		this.actions++;
 		
 		if(game.history[0]&&
@@ -303,9 +338,6 @@ this.screens.theScreen= function(){
 	};
 
 	this.sellCurrentStock = function(){
-		
-
-
 		this.actions++;
 		if(game.history[0]&&
 			game.history[0][this.selectedStock] &&
@@ -339,6 +371,10 @@ this.screens.theScreen= function(){
 		this.actions++;
 
 		var i = ((game.tickers.indexOf(this.selectedStock)||0)+1)%game.tickers.length;
+		var start = i -1;
+		while(game.stocks[game.tickers[i]].getCurrentValue()<=0 && i !=start){
+			i = (i+1)%game.tickers.length;
+		}
 		this.selectedStock = game.tickers[i];
 
 		this.thbbSound.pause();
