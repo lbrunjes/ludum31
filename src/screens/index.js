@@ -247,6 +247,8 @@ this.screens.theScreen= function(){
 			context.fillText(this.selectedStock, x+w/2 , y+h/3*2);
 			context.fillStyle = "#f00";
 			context.fillText("X", x+w/2 , y+h/3*2);
+			context.font = tsize/4+"px monospace";
+			context.fillText("click to change!!!", x+w/2 , y+h/4*3);
 	
 		}
 		else{
