@@ -26,7 +26,7 @@ var  gameInstance = function(){
 	this.stocks = {};
 
 	this.history =[];
-	this.historyLength = 300;
+	this.historyLength = 200;
 
 	this.context = {
 		"main":"2d"
@@ -40,6 +40,10 @@ var  gameInstance = function(){
 	this.init = function(){
 		this.width = window.innerWidth;
 		this.height =window.innerHeight;
+
+		if(this.width <1100 || this.height < 600){
+			alert("Hey,\n the game runs best at at least 1280x720.\nYou can resize or just hope things dont break.\nThey shouldn't break, but you know how it is.");
+		}
 
 	};
 

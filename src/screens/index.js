@@ -63,10 +63,12 @@ this.screens.theScreen= function(){
 						game.screens.entireGame.balloons = [];
 					}
 					else{
-						
-						game.screens.entireGame.endClickCount ++;
-						if(game.screens.entireGame.endClickCount >= 2){
-							location.reload();
+						if(Math.abs(diesel.mouseX -game.width /2) + Math.abs(diesel.mouseY - game.height/2) < game.height/3*2 && 
+							game.screens.entireGame.timeLeft < -5){
+							game.screens.entireGame.endClickCount ++;
+							if(game.screens.entireGame.endClickCount >= 2 ){
+								location.reload();
+							}
 						}
 					}
 
@@ -179,7 +181,7 @@ this.screens.theScreen= function(){
 		var range = Math.ceil(max - min);
 		range += 100 -(range %100);
 
-		vertscale = ((h / (range *1.5)) + this.lastZoom)/2;
+		vertscale = ((h / (range *1.2)) + this.lastZoom)/2;
 		this.lastZoom = vertscale;
 
 		context.save();
@@ -250,8 +252,12 @@ this.screens.theScreen= function(){
 	this.drawStock = function(context, stockName, x,y,w,h){
 		context.fillStyle = "#222";
 		context.fillRect(x, y, w, h);
+
 		
 		context.fillStyle = "#000";
+		if(diesel.mouseX > x && diesel.mouseY > y && diesel.mouseX < x+w && diesel.mouseY <y +h){
+			context.fillStyle = "rgba(255,255,255,.25)";
+		}
 		context.textAlign = "center";
 		var tsize = h/2;
 		context.font = tsize+"px monospace";
@@ -357,7 +363,7 @@ this.screens.theScreen= function(){
 		context.font = ltext+"px komika-axis";
 		context.fillText("CASH:"+Math.round(game.user.getCurrentCash()),x +16,y+ lineh -16 );
 		context.fillText("APM:"+this.getAPM(),x +16,y+lineh*2 -16 );
-		context.fillText("TIME: "+Math.ceil(this.timeLeft),x +16,y +lineh*3 -16);
+		context.fillText("TIME: "+ Math.max(0,Math.ceil(this.timeLeft)),x +16,y +lineh*3 -16);
 		context.fillText("???: "+ Math.round(this.getAPM()/10 +1), x+16, y+lineh*4 -16);
 		
 		
@@ -366,6 +372,14 @@ this.screens.theScreen= function(){
 			context.translate(x + w/3, y+16);
 			var step = w/3*2 /game.tickers.length;
 			var assets = game.user.getAssets();
+			var mouseIn  =-1;
+			if(diesel.mouseX > x && 
+				diesel.mouseY > y && 
+				diesel.mouseX < x+w && 
+				diesel.mouseY <y +h){
+
+					mouseIn = Math.floor((diesel.mouseX-w/3)/step);
+				}
 			
 			for(var i = 0 ; i < game.tickers.length;i++){
 				if(game.stocks[game.tickers[i]].getCurrentValue() > 0 ){
@@ -380,6 +394,12 @@ this.screens.theScreen= function(){
 					context.font = ltext+"px komika-axis";
 			
 					context.fillText(assets[game.tickers[i]]|| 0, i*step +ltext , h - 48 );
+					if(i == mouseIn ){
+						context.lineWidth = 5;
+						context.strokeStyle = "rgba(255,255,255, 0.5)";
+						context.strokeRect(i*step +10,10,  ltext*2 -20, h-52)
+					}
+					
 				}
 
 			}
@@ -403,7 +423,13 @@ this.screens.theScreen= function(){
 			}
 		}
 
+		if(!this.paused || this.timeLeft<=0){
+
+			this.timeLeft -=ticks;
+		}
+
 		if(!this.paused){
+			//slow down there buddy
 			if(diesel.frameCount %3 ==0){
 			diesel.raiseEvent("updateStocks", ticks);
 			}
@@ -420,8 +446,6 @@ this.screens.theScreen= function(){
 			}
 			
 
-			//out of time?
-			this.timeLeft -=ticks;
 
 			if(!validStocks || this.timeLeft<=0){
 				console.log("END THE GAME HERE")
@@ -438,7 +462,7 @@ this.screens.theScreen= function(){
 				}
 
 				
-				var msg =["Game Over", "your score:",Math.round((cash+stock) * (this.getAPM()/10 +1))];
+				var msg =["Game Over", "your score:",Math.round((cash+stock) * (this.getAPM()/10 +1)),"click+click here"];
 
 				var b = new game.objects.messageBalloon(msg);
 				this.balloons.push(b);
