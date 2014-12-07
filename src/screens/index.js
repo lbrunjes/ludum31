@@ -15,6 +15,7 @@ this.screens.theScreen= function(){
 	this.timeLeft = 60;
 	this.paused =true;
 	this.endClickCount = 0;
+	this.isBgm = false;
 
 	this.reset = function(){
 		if(!this.buySound){
@@ -42,6 +43,19 @@ this.screens.theScreen= function(){
 			w:window.innerWidth,
 			h:window.innerHeight,
 			click:function(){
+				if(diesel.mouseX <32 &&diesel.mouse < 32){
+					game.screens.entireGame.isBgm  = !game.screens.entireGame.isBgm;
+
+					if(game.screens.entireGame.isBgm){
+						var snd = document.getElementById("bgm");
+						snd.play()
+
+					}
+					else{
+						snd.pause();
+					}
+				}
+
 				if(game.screens.entireGame.paused){
 					if(game.screens.entireGame.timeLeft >0){
 						game.screens.entireGame.paused = false;
@@ -51,7 +65,7 @@ this.screens.theScreen= function(){
 						
 						game.screens.entireGame.endClickCount ++;
 						if(game.screens.entireGame.endClickCount >= 2){
-						//	diesel.raiseEvent("screenChange", "entireGame","entireGame");
+							location.reload();
 						}
 					}
 
@@ -440,7 +454,7 @@ this.screens.theScreen= function(){
 
 			this.didAction();
 		
-		
+
 			this.sellSound.pause();
 			this.sellSound.currentTime =0;
 			this.sellSound.play();
