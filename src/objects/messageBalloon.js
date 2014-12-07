@@ -14,7 +14,7 @@ this.objects.messageBalloon= function(text){
 		if(!text){
 			this.text = [
 			"Hello",
-			"Buy Low. Sell High",
+			"Buy Low. Sell High!",
 			"Watch out for bad stocks",
 			"Always pay your broker",
 			"[click to start]"
@@ -50,19 +50,23 @@ this.objects.messageBalloon= function(text){
 			context.restore();
 		}
 
+		// context.fillStyle="rgba(255,255,255,0.5)";
+		// context.beginPath();
+		// context.arc(0,0,this.r,0,Math.PI*2);
+		// context.fill();
+
 		context.fillStyle="#fff";
-		context.beginPath();
-		context.arc(0,0,this.r,0,Math.PI*2);
-		context.fill();
-		
 		context.textAlign = "center";
 		context.save();
 			context.translate(0, -this.r );
-			context.fillText(this.text[0],0,0);
-			context.font = game.fontSize/4+"px "+game.font;
-			context.fillStyle ="#000";
-			for(var i =1; i < this.text.length ;i++){
-				context.translate(0, game.fontSize/2);
+		
+			var lineh = (this.r*2)/(this.text.length * 2 +1) ;
+			
+			context.font = lineh+"px "+game.font;
+
+			
+			for(var i =0; i < this.text.length ;i++){
+				context.translate(0, lineh*2);
 				context.fillText(this.text[i],0,0)
 			}
 		context.restore();

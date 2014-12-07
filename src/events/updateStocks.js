@@ -5,7 +5,7 @@ this.events.updateStocks = function(lastUpdateSecs) {
     for (var stockname in game.stocks) {
         var stock = game.stocks[stockname];
         if(stock.getCurrentValue() >0 ){
-            stock.update();
+            stock.update(lastUpdateSecs[0]);
             currentState[stock.ticker] = {
                 name: stock.name,
                 ticker: stock.ticker,

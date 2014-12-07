@@ -16,8 +16,8 @@ echo ""
 
 echo "Finished: "$(date +%c)
 
-# cp ../web/* /c/inetpub/wwwroot/Stuff/ludum31
-# cp ../web/media/* /c/inetpub/wwwroot/Stuff/ludum31/media
+cp ../web/* /c/inetpub/wwwroot/Stuff/ludum31
+cp ../web/media/* /c/inetpub/wwwroot/Stuff/ludum31/media
 cp ../web/* /var/www/html/web/ludum31
 cp ../web/media/* /var/www/html/web/ludum31/media
 

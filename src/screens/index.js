@@ -14,6 +14,7 @@ this.screens.theScreen= function(){
 	this.balloons = [];
 	this.timeLeft = 60;
 	this.paused =true;
+	this.endClickCount = 0;
 
 	this.reset = function(){
 		if(!this.buySound){
@@ -28,6 +29,8 @@ this.screens.theScreen= function(){
 		this.balloons.push(b);
 
 		//TODO reset stuff
+		this.endClickCount =0;
+		this.timeLeft = 60;
 
 
 	}
@@ -45,7 +48,11 @@ this.screens.theScreen= function(){
 						game.screens.entireGame.balloons = [];
 					}
 					else{
-						//TODO
+						
+						game.screens.entireGame.endClickCount ++;
+						if(game.screens.entireGame.endClickCount >= 2){
+						//	diesel.raiseEvent("screenChange", "entireGame","entireGame");
+						}
 					}
 
 				}
@@ -76,7 +83,7 @@ this.screens.theScreen= function(){
 						var step = game.width/3*2/game.tickers.length;
 						var i = Math.floor((diesel.mouseX - (game.width/3))/step);
 						
-						this.actions++;
+						game.screens.entireGames.didAction();
 						game.screens.entireGame.selectedStock = game.tickers[i];
 
 						game.screens.entireGame.thbbSound.pause();
@@ -224,24 +231,33 @@ this.screens.theScreen= function(){
 	}
 
 	this.drawStock = function(context, stockName, x,y,w,h){
-		context.fillStyle = "#999";
+		context.fillStyle = "#222";
 		context.fillRect(x, y, w, h);
 		
 		context.fillStyle = "#000";
 		context.textAlign = "center";
-		var tsize = h/3*2;
+		var tsize = h/2;
 		context.font = tsize+"px monospace";
 		context.fillText(this.selectedStock, x+w/2 , y+h/3*2);
 
 		tsize -= 10;
-		context.fillStyle = game.stocks[this.selectedStock].color;
+		context.font = tsize+"px monospace";
 		if(game.stocks[this.selectedStock].getCurrentValue() <=0){
+			context.fillStyle = "#333";
+			context.fillText(this.selectedStock, x+w/2 , y+h/3*2);
 			context.fillStyle = "#f00";
+			context.fillText("X", x+w/2 , y+h/3*2);
+	
+		}
+		else{
+			context.fillStyle = game.stocks[this.selectedStock].color;
+			context.fillText(this.selectedStock, x+w/2 , y+h/3*2);
+	
+
 		}
 
-		context.font = tsize+"px monospace";
-		context.fillText(this.selectedStock, x+w/2 , y+h/3*2);
-		context.font = game.fontSize+"px "+game.font;
+		
+			context.font = game.fontSize+"px "+game.font;
 		context.fillStyle ="#fff";
 	//	context.fillText("NAME",x+w/2 , y+h/3*2 + game.fontSize *3);
 		context.fillText("£: "+Math.round(game.stocks[this.selectedStock].getCurrentValue()*100)/100, 
@@ -250,6 +266,8 @@ this.screens.theScreen= function(){
 
 		context.fillText("±: "+Math.round(game.stocks[this.selectedStock].getLastChange()*100)/100, 
 			x+w/2 , y+h - game.fontSize/2);
+
+		context.fillText("Active Stock", x+w/2, y+48);
 
 	}
 
@@ -267,32 +285,36 @@ this.screens.theScreen= function(){
 
 		context.fillStyle = "#fff";
 		context.textAlign = "center";
-		context.fillText("BUY", x+w/2, y+h/4);
-		context.fillText("SELL", x+w/2, y+h/4*3);
+		context.fillText("BUY "+this.selectedStock, x+w/2, y+h/4);
+		context.fillText("SELL "+ this.selectedStock, x+w/2, y+h/4*3);
 
 	}
 
 	this.drawChrome= function(context,x,y,w,h){
 
-		context.fillStyle= "#9f9";
+		context.fillStyle= "#fff";
+		context.fillRect(x,y,w,1);
+
+		context.fillStyle= "#272";
 		context.fillRect(x,y,w,h);
+
 		var lineh = h/4;
 		var ltext = lineh -16;
 
 
-		context.fillStyle= "#000";
+		// context.fillStyle= "#000";
 
-		context.fillRect(x +16,y+16, w/3-32, ltext);
-		context.fillRect(x +16,y +lineh +16, w/3-32, ltext);
+		// context.fillRect(x +16,y+16, w/3-32, ltext);
+		// context.fillRect(x +16,y +lineh +16, w/3-32, ltext);
 
-		context.fillRect(x +16,y +lineh *2 +16, w-32, lineh*2 -32);
+		// context.fillRect(x +16,y +lineh *2 +16, w-32, lineh*2 -32);
 
 		context.fillStyle= "#fff";
 		context.textAlign = "left";
 		context.font = ltext+"px komika-axis";
 		context.fillText("CASH:"+Math.round(game.user.getCurrentCash()),x +16,y+ lineh -16 );
 		context.fillText("APM:"+this.getAPM(),x +16,y+lineh*2 -16 );
-		context.fillText("TIME: "+Math.ceil(this.timeLeft),x +16,y +lineh*3);
+		context.fillText("TIME: "+Math.ceil(this.timeLeft),x +16,y +lineh*3 -16);
 		
 		context.save();
 			context.textAlign = "center";
@@ -303,16 +325,16 @@ this.screens.theScreen= function(){
 			for(var i = 0 ; i < game.tickers.length;i++){
 				if(game.stocks[game.tickers[i]].getCurrentValue() > 0 ){
 					context.fillStyle ="#000";
-					context.fillRect(i*step, 0, ltext, lineh*2 -32); 
+					context.fillRect(i*step, 0, ltext*2, h-32); 
 					context.fillStyle= game.stocks[game.tickers[i]].color;
-					context.font = ltext+"px komika-axis";
+					context.font = 2* ltext+"px komika-axis";
 			
-					context.fillText(game.tickers[i], i*step +(ltext/2), ltext);
+					context.fillText(game.tickers[i], i*step +ltext , ltext *2);
 					
 					context.fillStyle = "#fff";
-					context.font = ltext/2+"px komika-axis";
+					context.font = ltext+"px komika-axis";
 			
-					context.fillText(assets[game.tickers[i]]|| 0, i*step +ltext/2, ltext *2 );
+					context.fillText(assets[game.tickers[i]]|| 0, i*step +ltext , h - 48 );
 				}
 
 			}
@@ -370,7 +392,7 @@ this.screens.theScreen= function(){
 				}
 
 				
-				var msg =["Game Over", "your score:"+  Math.round(cash+stock)];
+				var msg =["Game Over", "your score:",Math.round(cash+stock)];
 
 				var b = new game.objects.messageBalloon(msg);
 				this.balloons.push(b);
@@ -382,7 +404,7 @@ this.screens.theScreen= function(){
 	};
 
 	this.buyCurrentStock=function(){
-		this.actions++;
+		this.didAction();
 		
 		if(game.history[0]&&
 			game.history[0][this.selectedStock] &&
@@ -409,7 +431,7 @@ this.screens.theScreen= function(){
 	};
 
 	this.sellCurrentStock = function(){
-		this.actions++;
+		this.didAction();
 		if(game.history[0]&&
 			game.history[0][this.selectedStock] &&
 			game.user.sellStock(game.history[0][this.selectedStock])){
@@ -439,7 +461,7 @@ this.screens.theScreen= function(){
 
 	this.nextStock =function(){
 		// console.log("nextStock", this.selectedStock);
-		this.actions++;
+		this.didAction();
 
 		var i = ((game.tickers.indexOf(this.selectedStock)||0)+1)%game.tickers.length;
 		var start = i -1;
@@ -452,6 +474,12 @@ this.screens.theScreen= function(){
 		this.thbbSound.currentTime = 0;
 		this.thbbSound.play();
 
+	}
+
+	this.didAction= function(){
+		this.actions++;
+
+		this.balloons.push( new game.objects.textBalloon("+1", 128 ,game.height -128, .5));
 	}
 
 };
