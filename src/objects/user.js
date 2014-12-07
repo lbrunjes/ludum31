@@ -22,7 +22,7 @@ this.objects.user = function (initialCash) {
 
     this.purchaseStock = function (stock) {
         var cost = stock.currentValue;
-        if (_currentCash >= cost) {
+        if (_currentCash >= cost && cost >0) {
             if (_assets[stock.ticker]) {
                 _assets[stock.ticker] += 1;
                 _currentCash -= stock.currentValue;
@@ -36,10 +36,12 @@ this.objects.user = function (initialCash) {
 
     this.sellStock = function (stock) {
         var ticker = stock.ticker;
-        if (_assets[ticker] && _assets[ticker] > 0) {
-            _currentCash += stock.currentValue;
-            _assets[ticker] -= 1;
-            return true;
+        if(stock.currentValue >0){
+            if (_assets[ticker] && _assets[ticker] > 0) {
+                _currentCash += stock.currentValue;
+                _assets[ticker] -= 1;
+                return true;
+            }
         }
         return false;
     };
