@@ -12,12 +12,21 @@ this.screens.theScreen= function(){
 
 	this.actions = 0;
 	this.balloons = [];
+	this.timeLeft = 30*60;
+	this.paused =true;
 
 	this.reset = function(){
-		this.buySound = document.getElementById("buy");
-		this.sellSound = document.getElementById("sell");
-		this.errSound = document.getElementById("err");
-		this.thbbSound = document.getElementById("thbb");
+		if(!this.buySound){
+			this.buySound = document.getElementById("buy");
+			this.sellSound = document.getElementById("sell");
+			this.errSound = document.getElementById("err");
+			this.thbbSound = document.getElementById("thbb");
+		}
+		
+		//show the intro screen
+		var b  = new game.objects.messageBalloon();
+		this.balloons.push(b);
+
 
 	}
 
@@ -28,7 +37,12 @@ this.screens.theScreen= function(){
 			w:window.innerWidth,
 			h:window.innerHeight,
 			click:function(){
-				
+				if(game.screens.entireGame.paused){
+					game.screens.entireGame.paused = false;
+					game.screens.entireGame.balloons = [];
+
+				}
+				else
 				if(diesel.mouseY < game.height/3*2){
 					//the buy and sell buttons
 					if(diesel.mouseX >game.width/6*5 && 
@@ -95,10 +109,16 @@ this.screens.theScreen= function(){
 		//draw the bottom chrome
 		this.drawChrome(game.context.main, 0,game.height/3*2, game.width, game.height/3);
 
-		game.context.re
+		if(this.paused){
+			game.context.main.fillStyle ="rgba(0,0,0,.75)";
+
+			game.context.main.fillRect(0,0,game.width,game.height);
+		}
+
 		for(var i = 0; i <this.balloons.length; i++){
 			this.balloons[i].draw(game.context.main);
 		}
+		
 
 	}
 
@@ -167,7 +187,8 @@ this.screens.theScreen= function(){
 					if(game.history[i][stock].currentValue == localmax[stock]){
 						context.save()
 						context.translate(w- step * i,
-							game.history[i][stock].currentValue +game.fontSize);
+							game.history[i][stock].currentValue );
+						context.scale(1,-1);
 						context.fillStyle = game.stocks[stock].color;
 						context.fillText(stock,0,0)
 						context.restore();
@@ -198,7 +219,7 @@ this.screens.theScreen= function(){
 	this.drawStock = function(context, stockName, x,y,w,h){
 		context.fillStyle = "#999";
 		context.fillRect(x, y, w, h);
-
+		
 		context.fillStyle = "#000";
 		context.textAlign = "center";
 		var tsize = h/3*2;
@@ -264,7 +285,7 @@ this.screens.theScreen= function(){
 		context.font = ltext+"px komika-axis";
 		context.fillText("CASH:"+Math.round(game.user.getCurrentCash()),x +16,y+ lineh -16 );
 		context.fillText("APM:"+this.getAPM(),x +16,y+lineh*2 -16 );
-		context.fillText("!!",x +16,y +lineh*3);
+		context.fillText("TIME: "+Math.ceil(this.timeLeft),x +16,y +lineh*3);
 		
 		context.save();
 			context.textAlign = "center";
@@ -299,12 +320,38 @@ this.screens.theScreen= function(){
 
 	this.update =function(ticks){
 
-		diesel.raiseEvent("updateStocks", ticks);
 		for(var i = 0; i <this.balloons.length; i++){
 			this.balloons[i].update(ticks);
 			if(this.balloons[i].time <=0 ){
 				this.balloons.splice(i,1);
 				i--;
+			}
+		}
+
+		if(!this.paused){
+			if(diesel.frameCount %3 ==0){
+			diesel.raiseEvent("updateStocks", ticks);
+			}
+			
+
+			//did we meet end standards?
+			var shouldEnd = false;
+			//1 stock?
+			var validStocks = 0;
+			for(var stock in game.stocks){
+				if(game.stocks[stock].getCurrentValue()>0){
+					validStocks++;
+				}
+			}
+			
+
+			//out of time?
+			this.timeLeft -=ticks;
+
+			if(!validStocks || this.timeLeft<=0){
+				console.log("END THE GAME HERE")
+
+				//calculate score;
 			}
 		}
 

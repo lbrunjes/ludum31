@@ -6,5 +6,6 @@ objects/index.js
 objects/stock.js
 objects/user.js
 objects/textBalloon.js
+objects/messageBalloon.js
 screens/index.js
 end.js
