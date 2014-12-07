@@ -11,6 +11,7 @@ this.screens.theScreen= function(){
 	this.thbbSound =false;
 
 	this.actions = 0;
+	this.balloons = [];
 
 	this.reset = function(){
 		this.buySound = document.getElementById("buy");
@@ -34,7 +35,7 @@ this.screens.theScreen= function(){
 						diesel.mouseX <game.width
 					){
 
-						if(diesel.mouseY < game.height/4){
+						if(diesel.mouseY < game.height/3){
 							game.screens.entireGame.buyCurrentStock();
 						}
 						else{
@@ -94,7 +95,10 @@ this.screens.theScreen= function(){
 		//draw the bottom chrome
 		this.drawChrome(game.context.main, 0,game.height/3*2, game.width, game.height/3);
 
-
+		game.context.re
+		for(var i = 0; i <this.balloons.length; i++){
+			this.balloons[i].draw(game.context.main);
+		}
 
 	}
 
@@ -120,37 +124,37 @@ this.screens.theScreen= function(){
 
 		context.save();
 		
-		context.translate(0, h);
-		context.scale(1,-1*vertscale);
-		context.translate(0, -min +range/4)
-	
-
-		//TODO draw scale
-
-		context.fillRect(0,-1,w,1);
+			context.translate(0, h);
+			context.scale(1,-1*vertscale);
+			context.translate(0, -min )
 		
-		var step = w/game.history.length;
-		for(var i = 0; i<game.history.length ; i++){
-			for(var stock in game.history[i]){
-				
-				context.strokeStyle= (game.stocks[stock].color || "#fff");
 
-				context.lineWidth = 1/vertscale;
-				if(stock == this.selectedStock ){
-					context.lineWidth = 5/vertscale;
+			//TODO draw scale
 
+			context.fillRect(0,-1,w,1);
+			
+			var step = w/game.history.length;
+			for(var i = 0; i<game.history.length ; i++){
+				for(var stock in game.history[i]){
+					
+					context.strokeStyle= (game.stocks[stock].color || "#fff");
+
+					context.lineWidth = 1/vertscale;
+					if(stock == this.selectedStock ){
+						context.lineWidth = 5/vertscale;
+
+					}
+					
+					context.beginPath();
+					context.moveTo( w- step * i,
+						game.history[i][stock].currentValue);
+					context.lineTo(w - step * (i + 1),
+						game.history[i][stock].currentValue - game.history[i][stock].lastChange);
+
+					context.stroke();
+					
 				}
-				
-				context.beginPath();
-				context.moveTo( w- step * i,
-					game.history[i][stock].currentValue);
-				context.lineTo(w - step * (i + 1),
-					game.history[i][stock].currentValue - game.history[i][stock].lastChange);
-
-				context.stroke();
-				
 			}
-		}
 		context.restore();
 
 	}
@@ -166,19 +170,22 @@ this.screens.theScreen= function(){
 		context.fillText(this.selectedStock, x+w/2 , y+h/3*2);
 
 		tsize -= 10;
-		context.fillStyle = "#fff";
+		context.fillStyle = game.stocks[this.selectedStock].color;
 		if(game.stocks[this.selectedStock].getCurrentValue() <=0){
 			context.fillStyle = "#f00";
 		}
+
 		context.font = tsize+"px monospace";
 		context.fillText(this.selectedStock, x+w/2 , y+h/3*2);
 		context.font = game.fontSize+"px "+game.font;
-
-		context.fillText("NAME",x+w/2 , y+h/3*2 + game.fontSize *3);
+		context.fillStyle ="#fff";
+	//	context.fillText("NAME",x+w/2 , y+h/3*2 + game.fontSize *3);
 		context.fillText("£: "+Math.round(game.stocks[this.selectedStock].getCurrentValue()*100)/100, 
-			x+w/2 , y+h/3*2 + game.fontSize *5);
+			x+w/2 , y+h -game.fontSize *1.5);
+
+
 		context.fillText("±: "+Math.round(game.stocks[this.selectedStock].getLastChange()*100)/100, 
-			x+w/2 , y+h/3*2 + game.fontSize *6);
+			x+w/2 , y+h - game.fontSize/2);
 
 	}
 
@@ -257,6 +264,13 @@ this.screens.theScreen= function(){
 	this.update =function(ticks){
 
 		diesel.raiseEvent("updateStocks", ticks);
+		for(var i = 0; i <this.balloons.length; i++){
+			this.balloons[i].update(ticks);
+			if(this.balloons[i].time <=0 ){
+				this.balloons.splice(i,1);
+				i--;
+			}
+		}
 
 	};
 
@@ -273,7 +287,10 @@ this.screens.theScreen= function(){
 			this.buySound.play();
 
 
-			// AWARD ST0CK
+			var ball =new game.objects.textBalloon(this.selectedStock,
+			diesel.mouseX, diesel.mouseY,2);
+			
+			this.balloons.push(ball);
 
 			
 		}
@@ -286,7 +303,9 @@ this.screens.theScreen= function(){
 	};
 
 	this.sellCurrentStock = function(){
-		console.log("sell", this.selectedStock);
+		
+
+
 		this.actions++;
 		if(game.history[0]&&
 			game.history[0][this.selectedStock] &&
@@ -294,6 +313,17 @@ this.screens.theScreen= function(){
 			this.sellSound.pause();
 			this.sellSound.currentTime =0;
 			this.sellSound.play();
+
+			var ball =new game.objects.textBalloon(
+			Math.round(game.stocks[this.selectedStock].getCurrentValue()),
+			diesel.mouseX, diesel.mouseY,2);
+			if(ball.text > 0){
+				ball.text = "+" +ball.text;
+			}
+			else{
+				ball.color = "#fff";
+			}
+			this.balloons.push(ball);
 
 		}
 		else{
@@ -305,7 +335,7 @@ this.screens.theScreen= function(){
 	};
 
 	this.nextStock =function(){
-		console.log("nextStock", this.selectedStock);
+		// console.log("nextStock", this.selectedStock);
 		this.actions++;
 
 		var i = ((game.tickers.indexOf(this.selectedStock)||0)+1)%game.tickers.length;

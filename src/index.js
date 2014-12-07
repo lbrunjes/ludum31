@@ -9,18 +9,15 @@ var  gameInstance = function(){
 	this.width =640;
 	this.height = 480;
 
-	this.tickers =["⚗",
-		
+	this.tickers =[
 		"Ϣ",
-		// "♂",
-		// "♀",
-		"☣",//win
+		"☣",
 		"畫",
-		"☃",//win
-		"☭",//win
-		"☮",//win
-		"♖",//win
-		"♞",//win
+		"☃",
+		"☭",
+		"☮",
+		
+		"♞",
 		"ሜ",
 		"இ",
 		"Ꭽ",
