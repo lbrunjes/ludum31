@@ -40,8 +40,13 @@ this.screens.theScreen= function(){
 			h:window.innerHeight,
 			click:function(){
 				if(game.screens.entireGame.paused){
-					game.screens.entireGame.paused = false;
-					game.screens.entireGame.balloons = [];
+					if(game.screens.entireGame.timeLeft >0){
+						game.screens.entireGame.paused = false;
+						game.screens.entireGame.balloons = [];
+					}
+					else{
+						//TODO
+					}
 
 				}
 				else
@@ -354,13 +359,23 @@ this.screens.theScreen= function(){
 				console.log("END THE GAME HERE")
 
 				//calculate score;
-				if(!paused){
-					var msg =["Game Over", "your score:"+ game.user.getCurrentCash() ];
 
-					var b = new game.objects.messageBalloon();
-					this.balloons.push(b);
-					this.pause =true;
+				var cash = game.user.getCurrentCash();
+				var stock =0;
+				var assets = game.user.getAssets();
+				for(stk  in assets){
+					if(assets[stk]>0){
+						stock += assets[stk] * game.stocks[stk].getCurrentValue();
+					}
 				}
+
+				
+				var msg =["Game Over", "your score:"+  Math.round(cash+stock)];
+
+				var b = new game.objects.messageBalloon(msg);
+				this.balloons.push(b);
+				this.paused = true;
+				
 			}
 		}
 
