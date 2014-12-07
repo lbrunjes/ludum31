@@ -83,7 +83,7 @@ this.screens.theScreen= function(){
 						var step = game.width/3*2/game.tickers.length;
 						var i = Math.floor((diesel.mouseX - (game.width/3))/step);
 						
-						game.screens.entireGames.didAction();
+						game.screens.entireGame.didAction();
 						game.screens.entireGame.selectedStock = game.tickers[i];
 
 						game.screens.entireGame.thbbSound.pause();
