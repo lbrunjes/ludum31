@@ -12,7 +12,7 @@ this.screens.theScreen= function(){
 
 	this.actions = 0;
 	this.balloons = [];
-	this.timeLeft = 30*60;
+	this.timeLeft = 60;
 	this.paused =true;
 
 	this.reset = function(){
@@ -26,6 +26,8 @@ this.screens.theScreen= function(){
 		//show the intro screen
 		var b  = new game.objects.messageBalloon();
 		this.balloons.push(b);
+
+		//TODO reset stuff
 
 
 	}
@@ -270,7 +272,7 @@ this.screens.theScreen= function(){
 		context.fillStyle= "#9f9";
 		context.fillRect(x,y,w,h);
 		var lineh = h/4;
-		var ltext = lineh -32;
+		var ltext = lineh -16;
 
 
 		context.fillStyle= "#000";
@@ -305,7 +307,7 @@ this.screens.theScreen= function(){
 					context.fillStyle = "#fff";
 					context.font = ltext/2+"px komika-axis";
 			
-					context.fillText(assets[game.tickers[i]]|| 0, i*step +ltext/2, ltext *2 +24);
+					context.fillText(assets[game.tickers[i]]|| 0, i*step +ltext/2, ltext *2 );
 				}
 
 			}
@@ -352,6 +354,13 @@ this.screens.theScreen= function(){
 				console.log("END THE GAME HERE")
 
 				//calculate score;
+				if(!paused){
+					var msg =["Game Over", "your score:"+ game.user.getCurrentCash() ];
+
+					var b = new game.objects.messageBalloon();
+					this.balloons.push(b);
+					this.pause =true;
+				}
 			}
 		}
 
