@@ -53,6 +53,8 @@ this.screens.theScreen= function(){
 
 					}
 					else{
+						var snd = document.getElementById("bgm");
+						
 						snd.pause();
 					}
 				}
@@ -149,10 +151,46 @@ this.screens.theScreen= function(){
 		for(var i = 0; i <this.balloons.length; i++){
 			this.balloons[i].draw(game.context.main);
 		}
-		
+		this.drawBgm(game.context.main);
+
 
 	}
 
+	this.drawBgm = function(context){
+		context.fillStyle = "#f00";
+		if(this.isBgm){
+			context.fillStyle = "#0f0";
+			context.strokeStyle = "#0f0";
+
+
+			context.beginPath();
+			context.moveTo(14,14);
+			context.lineTo(32,6);
+			context.stroke();
+
+			context.beginPath();
+			context.moveTo(14,16);
+			context.lineTo(32,16);
+			context.stroke();
+
+			context.beginPath();
+			context.moveTo(14,18);
+			context.lineTo(32,30);
+			context.stroke();
+
+		}
+
+		context.beginPath();
+		context.moveTo(2,8)
+		context.lineTo(6,8);
+		context.lineTo(12,1);
+		context.lineTo(12,31);
+		context.lineTo(6,24);
+		context.lineTo(2,24);
+		context.fill();
+
+
+	}
 	this.drawGraph = function(context, hist, x, y, w, h){
 		context.fillStyle="#000";
 		context.fillRect(x, y ,w ,h );
